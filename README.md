@@ -67,6 +67,21 @@ docker compose --profile container-db up -d postgres
 
 当前开发数据库使用本机PostgreSQL 16，不要求Docker。Testcontainers隔离测试以及Valkey、SeaweedFS容器运行验收仍需兼容容器环境。
 
+## OIDC 登录状态
+
+OIDC协议入口已经实现，地址为 `GET /api/v1/auth/oidc/login`。当前默认关闭，因此在尚未配置身份提供方时会返回 `503 Service Unavailable`，不会创建临时用户名密码。
+
+启用前需要在Casdoor创建应用，将 `http://localhost:8080/login/oauth2/code/casdoor` 登记为回调地址，并通过环境变量注入：
+
+```powershell
+$env:CJ_IDENTITY_OIDC_ENABLED = "true"
+$env:CJ_IDENTITY_OIDC_CLIENT_ID = "Casdoor应用的Client ID"
+$env:CJ_IDENTITY_OIDC_CLIENT_SECRET = "Casdoor应用的Client Secret"
+$env:CJ_IDENTITY_OIDC_ISSUER_URI = "Casdoor服务地址"
+```
+
+如果Casdoor不是默认的 `http://127.0.0.1:8000`，还需按其 Discovery 文档覆盖授权、Token、JWKS和UserInfo端点。真实密钥不得提交到Git。
+
 ## 本地端口
 
 | 服务 | 端口 |

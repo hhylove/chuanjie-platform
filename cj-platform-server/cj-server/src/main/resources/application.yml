@@ -21,6 +21,39 @@ springdoc:
     # 标签按名称排序，后续模块增多时保持导航稳定。
     tags-sorter: alpha
 
+cj:
+  identity:
+    oidc:
+      # OIDC总开关；取得身份提供方客户端凭据后通过CJ_IDENTITY_OIDC_ENABLED=true启用。
+      enabled: false
+      # Spring Security注册标识，也是默认回调路径的一部分。
+      registration-id: casdoor
+      # 登录页和审计中显示的提供方名称；协议实现不依赖Casdoor SDK。
+      client-name: Casdoor
+      # OIDC客户端编号；必须通过CJ_IDENTITY_OIDC_CLIENT_ID环境变量注入，仓库不保存真实值。
+      client-id: ""
+      # OIDC客户端密钥；必须通过CJ_IDENTITY_OIDC_CLIENT_SECRET或密钥系统注入。
+      client-secret: ""
+      # ID Token签发者；部署Casdoor后通过CJ_IDENTITY_OIDC_ISSUER_URI覆盖本机默认地址。
+      issuer-uri: http://127.0.0.1:8000
+      # 标准授权端点；浏览器会被重定向到这里完成登录。
+      authorization-uri: http://127.0.0.1:8000/login/oauth/authorize
+      # 标准Token端点；后端使用授权码和PKCE verifier换取令牌。
+      token-uri: http://127.0.0.1:8000/api/login/oauth/access_token
+      # OIDC公开签名密钥端点；后端据此验证ID Token，禁止跳过签名校验。
+      jwk-set-uri: http://127.0.0.1:8000/.well-known/jwks
+      # 标准用户信息端点；只读取身份映射所需的最小声明。
+      user-info-uri: http://127.0.0.1:8000/api/get-account
+      # Casdoor稳定主体声明名；更换提供方时按其标准subject声明调整。
+      user-name-attribute: sub
+      # OIDC回调模板；反向代理部署时由CJ_IDENTITY_OIDC_REDIRECT_URI覆盖并在提供方登记。
+      redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+      # 最小OIDC范围；openid用于启用nonce和ID Token，profile/email供后续账号映射。
+      scopes:
+        - openid
+        - profile
+        - email
+
 management:
   endpoints:
     web:
