@@ -1,0 +1,19 @@
+spring:
+  application:
+    # 应用名称：用于日志、指标和后续服务发现标识。
+    name: cj-platform-server
+
+server:
+  # 后端HTTP端口；本地前端代理和生产网关均连接此端口。
+  port: 8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # 首期只公开健康和版本信息，避免暴露敏感运行配置。
+        include: health,info
+  endpoint:
+    health:
+      # 为容器健康检查返回组件级状态；生产网关只判断总体状态。
+      show-details: when_authorized
