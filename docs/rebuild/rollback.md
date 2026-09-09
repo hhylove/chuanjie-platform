@@ -2,16 +2,16 @@
 
 ## 1. 恢复基线
 
-R0使用本地 Git 提交保存删除前状态，不创建远程仓库。提交完成后记录提交哈希。恢复操作必须精确到删除批次或文件，禁止使用 `git reset --hard` 覆盖用户的后续修改。
+R0使用本地 Git 提交保存删除前状态，不创建远程仓库。删除前恢复基线为 `30a85e1`。恢复操作必须精确到删除批次或文件，禁止使用 `git reset --hard` 覆盖用户的后续修改。
 
 推荐恢复方式：
 
 ```powershell
 # 查看基线中的文件，不修改工作区
-git -c safe.directory=D:/code/chuanjie show <baseline-commit>:<path>
+git -c safe.directory=D:/code/chuanjie show 30a85e1:<path>
 
 # 经确认后，仅恢复明确文件
-git -c safe.directory=D:/code/chuanjie restore --source <baseline-commit> -- <path>
+git -c safe.directory=D:/code/chuanjie restore --source 30a85e1 -- <path>
 ```
 
 ## 2. 可再生成内容恢复

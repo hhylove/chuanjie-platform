@@ -7,8 +7,9 @@
 
 - 工作目录：`D:\code\chuanjie`
 - 初始状态：没有 Git 仓库。
-- 已执行：本地 `git init`，未创建 GitHub 仓库、未配置远程地址、未上传文件。
-- 当前限制：目录所有者与沙箱用户不同，普通 Git 写操作触发安全保护；后续采用单次受控权限完成本地基线提交，不修改全局 `safe.directory`。
+- 已执行：本地 `git init`，分支为 `main`，未创建 GitHub 仓库、未配置远程地址、未上传文件。
+- 删除前恢复基线：`30a85e1 chore: establish v1 recovery baseline`。
+- 当前限制：目录所有者与沙箱用户不同，Git 命令使用单次 `safe.directory` 参数，不修改全局 Git 安全设置。
 
 ## 2. 必须永久保留的业务资料
 
