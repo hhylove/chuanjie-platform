@@ -7,6 +7,20 @@ server:
   # 后端HTTP端口；本地前端代理和生产网关均连接此端口。
   port: 8080
 
+springdoc:
+  api-docs:
+    # 非local环境默认不暴露OpenAPI JSON；确需开放时由受控环境配置覆盖。
+    enabled: ${CJ_API_DOCS_ENABLED:false}
+  swagger-ui:
+    # 非local环境默认关闭交互式接口页面，避免向公网暴露接口结构。
+    enabled: ${CJ_SWAGGER_UI_ENABLED:false}
+    # 统一Swagger入口，兼容项目工程规范与开发人员书签。
+    path: /swagger-ui.html
+    # 接口按HTTP方法排序，便于同一路径下快速区分读写操作。
+    operations-sorter: method
+    # 标签按名称排序，后续模块增多时保持导航稳定。
+    tags-sorter: alpha
+
 management:
   endpoints:
     web:

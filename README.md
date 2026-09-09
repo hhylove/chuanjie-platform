@@ -50,6 +50,10 @@ cd ..\cj-platform-server
 .\mvnw.cmd -pl cj-server -am package -DskipTests
 java -jar .\cj-server\target\cj-server-0.1.0-SNAPSHOT.jar --spring.profiles.active=local
 
+# local配置启动后查看接口文档
+# Swagger UI: http://localhost:8080/swagger-ui.html
+# OpenAPI JSON: http://localhost:8080/v3/api-docs
+
 # 可选容器基础设施；普通up不会启动已配置profile的PostgreSQL
 cd ..
 docker compose config
@@ -68,6 +72,7 @@ docker compose --profile container-db up -d postgres
 | 服务 | 端口 |
 |---|---:|
 | 后端 | 8080 |
+| Swagger UI（仅local默认开启） | 8080/swagger-ui.html |
 | 管理端 | 5173 |
 | PostgreSQL | 5432 |
 | Valkey | 6379 |

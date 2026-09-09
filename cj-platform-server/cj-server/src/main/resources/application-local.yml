@@ -21,3 +21,10 @@ spring:
     # 已执行脚本被修改时启动失败，避免数据库结构与代码版本静默漂移。
     validate-on-migrate: true
 
+springdoc:
+  api-docs:
+    # 本地开发默认生成OpenAPI JSON；可设CJ_API_DOCS_ENABLED=false临时关闭。
+    enabled: ${CJ_API_DOCS_ENABLED:true}
+  swagger-ui:
+    # 本地开发默认开放Swagger UI；生产环境不启用local配置且默认关闭。
+    enabled: ${CJ_SWAGGER_UI_ENABLED:true}

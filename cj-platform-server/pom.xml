@@ -31,5 +31,7 @@
         <maven.compiler.release>21</maven.compiler.release>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <archunit.version>1.4.1</archunit.version>
+        <!-- Spring Boot 3专用OpenAPI文档组件版本；统一管理避免模块自行漂移。 -->
+        <springdoc.version>2.9.1</springdoc.version>
     </properties>
 </project>
