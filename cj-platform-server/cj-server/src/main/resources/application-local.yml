@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    # 本地控制面数据库地址；默认连接Windows本机PostgreSQL 16，部署环境通过环境变量覆盖。
+    url: ${CJ_CONTROL_DB_URL:jdbc:postgresql://127.0.0.1:5432/cj_control}
+    # 本地项目专用普通账号；生产环境必须使用独立最小权限账号。
+    username: ${CJ_CONTROL_DB_USERNAME:cj_local}
+    # 本地开发密码；生产环境必须通过密钥系统注入CJ_CONTROL_DB_PASSWORD。
+    password: ${CJ_CONTROL_DB_PASSWORD:cj_local_change_me}
+    hikari:
+      # 本地中型单实例的连接池上限；压测后再按数据库容量调整。
+      maximum-pool-size: ${CJ_CONTROL_DB_POOL_MAX:10}
+      # 保留少量空闲连接降低首次请求延迟，开发机资源紧张时可设为0。
+      minimum-idle: ${CJ_CONTROL_DB_POOL_MIN:2}
+      # 获取连接最长等待毫秒数，超时后快速失败而不是无限堆积请求。
+      connection-timeout: ${CJ_CONTROL_DB_CONNECTION_TIMEOUT_MS:30000}
+  flyway:
+    # local启动时自动执行版本化迁移，禁止通过Navicat手工创建业务表。
+    enabled: true
+    # 迁移脚本统一由聚合应用加载；后续模块迁移仍进入此类路径。
+    locations: classpath:db/migration
+    # 已执行脚本被修改时启动失败，避免数据库结构与代码版本静默漂移。
+    validate-on-migrate: true
+

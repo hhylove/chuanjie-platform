@@ -82,13 +82,13 @@
 **Files:**
 - Create: `cj-platform-server/cj-server/src/main/resources/db/migration/V1__v2_control_plane.sql`
 - Create: `cj-platform-server/cj-server/src/main/resources/db/migration/V2__v2_tenant_foundation.sql`
-- Create: `cj-platform-server/cj-module-tenant-foundation/cj-module-tenant-foundation-biz/src/test/java/com/chuanjie/platform/tenant/TenantIsolationIT.java`
+- Create: `cj-platform-server/cj-server/src/test/java/com/chuanjie/platform/tenant/TenantIsolationIT.java`
 
-**Step 1:** 使用 Testcontainers 编写跨租户读取、修改、唯一约束和 RLS 的失败测试。
+**Step 1:** 在聚合应用模块使用 Testcontainers 编写跨租户读取、修改、唯一约束和 RLS 的失败测试；同时增加不依赖Docker的迁移契约测试，确保无Docker环境不会把跳过误报为通过。
 
 **Step 2:** 运行对应测试，预期因表和策略不存在而失败。
 
-**Step 3:** 创建全局账号、租户、成员、套餐、配额、数据库路由、部门、岗位、角色和授权表；每个字段写 SQL `COMMENT`。
+**Step 3:** 创建全局账号、租户、成员、套餐、配额和数据库路由表；每个字段写 SQL `COMMENT`。部门、岗位、角色和业务授权属于R2，本任务禁止提前实现。
 
 **Step 4:** 实现租户上下文、MyBatis过滤及 PostgreSQL RLS 会话设置。
 

@@ -7,7 +7,7 @@
 - V1前后端源码已清理，恢复基线：`30a85e1`
 - R1 SaaS控制面设计已评审通过
 - 已建立Java模块化单体和Vue租户感知前端骨架
-- OIDC、数据库模型和真实租户接口尚未实现
+- R1控制面数据库模型已建立；OIDC和真实租户接口尚未实现
 
 ## 工程目录
 
@@ -18,7 +18,7 @@
 | `.cursor/skills/chuanjie-platform/` | 已评审架构、阶段设计与进度门禁 |
 | `docs/plans/` | 可执行实施计划 |
 | `docs/rebuild/` | V1清理、恢复和迁移记录 |
-| `docker-compose.yml` | PostgreSQL、Valkey、SeaweedFS本地环境 |
+| `docker-compose.yml` | 可选容器PostgreSQL、Valkey、SeaweedFS环境 |
 
 ## 技术基线
 
@@ -45,15 +45,23 @@ pnpm test
 pnpm typecheck
 pnpm build:admin
 
-# 本地基础设施
+# 后端连接本机PostgreSQL 16并自动执行Flyway迁移
+cd ..\cj-platform-server
+.\mvnw.cmd -pl cj-server -am package -DskipTests
+java -jar .\cj-server\target\cj-server-0.1.0-SNAPSHOT.jar --spring.profiles.active=local
+
+# 可选容器基础设施；普通up不会启动已配置profile的PostgreSQL
 cd ..
 docker compose config
 docker compose up -d
+
+# 只有明确需要容器数据库时才执行
+docker compose --profile container-db up -d postgres
 ```
 
 也可以在项目根目录运行 `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`，一次完成后端测试、前端测试、类型检查、构建和可用时的Compose校验。本机无需全局安装Maven；Wrapper首次运行会下载固定的Maven 3.9.11。
 
-当前设备尚未安装Docker CLI，因此这里只完成了Compose YAML静态结构检查，容器运行验收待Docker可用后执行。
+当前开发数据库使用本机PostgreSQL 16，不要求Docker。Testcontainers隔离测试以及Valkey、SeaweedFS容器运行验收仍需兼容容器环境。
 
 ## 本地端口
 

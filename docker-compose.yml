@@ -3,6 +3,8 @@
 services:
   postgres:
     # R1控制面与首个共享租户库；大客户独立库通过相同PostgreSQL版本扩展。
+    # 当前开发默认使用Windows本机PostgreSQL；仅显式启用container-db配置时创建容器数据库。
+    profiles: ["container-db"]
     image: postgres:16-alpine
     container_name: cj-v2-postgres
     restart: unless-stopped

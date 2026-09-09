@@ -14,7 +14,7 @@ disable-model-invocation: true
 
 - [architecture-v2-saas.md](architecture-v2-saas.md) ← **已评审通过的多租户 SaaS 技术架构，最高技术优先级**
 - [v2-rebuild.md](v2-rebuild.md) ← V2 重建阶段、门禁与验收
-- [r1-saas-control-plane.md](r1-saas-control-plane.md) ← R1 SaaS控制面专项设计（待评审）
+- [r1-saas-control-plane.md](r1-saas-control-plane.md) ← R1 SaaS控制面专项设计（已评审通过，开发中）
 - [progress.md](progress.md) ← 过程状态真相
 
 旧 S0～S5 文档与代码作为 V1 历史参考，当前暂停；不得继续按单公司、自建 JWT、Redis/MinIO 路线开发。任何旧实现删除前必须先完成可恢复基线、删除清单和用户评审。
