@@ -1,62 +1,76 @@
-# 创界 S0 本地中间件：Postgres（业务库）+ Redis（缓存）+ MinIO（对象存储）
-# 启动：docker compose up -d
-# 后端联调 profile：local（见 application-local.yml）
-
+# 创界云枢V2本地基础设施：PostgreSQL控制/共享库、Valkey缓存、SeaweedFS对象存储。
+# 启动：docker compose up -d；本文件只使用本地开发凭据，生产环境必须由密钥系统注入。
 services:
   postgres:
-    # 业务主库；与 application-local.yml 数据源一致
+    # R1控制面与首个共享租户库；大客户独立库通过相同PostgreSQL版本扩展。
     image: postgres:16-alpine
-    container_name: cj-postgres
+    container_name: cj-v2-postgres
+    restart: unless-stopped
     environment:
-      # 初始库名
-      POSTGRES_DB: cj_platform
-      # 应用连接用户
-      POSTGRES_USER: cj
-      # 仅本地开发密码，禁止用于生产
-      POSTGRES_PASSWORD: cj_local
+      # 本地初始数据库；生产控制库与租户数据面应使用不同账号和连接池。
+      POSTGRES_DB: cj_control
+      # 本地开发账号；生产环境禁止使用此值。
+      POSTGRES_USER: cj_local
+      # 本地开发密码；生产环境必须改为外部密钥注入。
+      POSTGRES_PASSWORD: cj_local_change_me
     ports:
-      # 宿主机 5432 -> 容器 5432
+      # 宿主机5432映射数据库端口，供本地后端和管理工具使用。
       - "5432:5432"
     volumes:
-      # 数据持久化卷，避免容器删除丢库
-      - cj_pg_data:/var/lib/postgresql/data
+      # 保存本地控制面和测试租户数据，重启容器不会丢失。
+      - cj_v2_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      # compose 依赖探测：库可接受连接
-      test: ["CMD-SHELL", "pg_isready -U cj -d cj_platform"]
+      # 只有数据库接受当前应用账号连接后才标记健康。
+      test: ["CMD-SHELL", "pg_isready -U cj_local -d cj_control"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 12
 
-  redis:
-    # 缓存/分布式锁等；S0 配置预留
-    image: redis:7-alpine
-    container_name: cj-redis
+  valkey:
+    # 缓存、OIDC临时state/nonce、验证码限流和短期会话辅助；不保存唯一永久数据。
+    image: valkey/valkey:9.1.1-alpine
+    container_name: cj-v2-valkey
+    restart: unless-stopped
+    command: ["valkey-server", "--appendonly", "yes"]
     ports:
+      # 保持Redis协议默认端口，便于Spring Data Redis兼容接入。
       - "6379:6379"
+    volumes:
+      # 保存本地AOF，方便重启后继续联调；正式会话权威记录仍在PostgreSQL。
+      - cj_v2_valkey_data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      # PONG表示Valkey主进程已接受命令。
+      test: ["CMD", "valkey-cli", "ping"]
       interval: 5s
       timeout: 3s
-      retries: 10
+      retries: 12
 
-  minio:
-    # 对象存储（附件/导出等）；S0 仅起服务，业务接入后续阶段
-    image: minio/minio:latest
-    container_name: cj-minio
-    # API 9000，控制台 9001
-    command: server /data --console-address ":9001"
+  seaweedfs:
+    # 单节点开发模式同时提供master、volume、filer与S3接口；大型部署再拆分角色扩容。
+    image: chrislusf/seaweedfs:4.46
+    container_name: cj-v2-seaweedfs
+    restart: unless-stopped
+    command: ["server", "-dir=/data", "-s3", "-s3.port=8333"]
     environment:
-      MINIO_ROOT_USER: cjminio
-      # 仅本地开发口令
-      MINIO_ROOT_PASSWORD: cjminio_local
+      # 本地S3访问账号；生产环境改由密钥系统和IAM配置提供。
+      AWS_ACCESS_KEY_ID: cj_local
+      # 本地S3访问密钥；禁止用于生产。
+      AWS_SECRET_ACCESS_KEY: cj_local_change_me
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      # Master状态与管理端口，只用于本地诊断。
+      - "9333:9333"
+      # Filer文件接口，后端通常不直接暴露给公网。
+      - "8888:8888"
+      # S3兼容接口，后端文件服务通过此端口访问。
+      - "8333:8333"
     volumes:
-      - cj_minio_data:/data
+      # 保存本地文件块和元数据；生产环境按SeaweedFS角色拆分卷。
+      - cj_v2_seaweedfs_data:/data
 
 volumes:
-  # 具名卷：Postgres 数据
-  cj_pg_data:
-  # 具名卷：MinIO 对象数据
-  cj_minio_data:
+  # PostgreSQL持久化卷。
+  cj_v2_postgres_data:
+  # Valkey本地AOF卷。
+  cj_v2_valkey_data:
+  # SeaweedFS单节点数据卷。
+  cj_v2_seaweedfs_data:

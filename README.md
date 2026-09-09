@@ -1,66 +1,79 @@
-# 创界新后台（chuanjie）
+# 创界云枢 V2
 
-统一企业经营与创业项目管理平台。当前交付：**S0 脚手架 + S1-01 登录/身份底座（进行中）**。
+面向多家公司的经营与协作SaaS平台。V2采用全新实现：默认共享数据库，大客户可独立数据库，并支持同一套代码私有部署。
 
-## 目录
+## 当前状态
 
-| 路径 | 说明 |
-|------|------|
-| `cj-platform-server/` | 后端模块化单体 |
-| `cj-platform-web/` | 前端 pnpm monorepo |
-| `docs/` | 文档 |
-| `.cursor/skills/chuanjie-platform/` | 项目 skill（先文档后开发） |
-| `docker-compose.yml` | Postgres / Redis / MinIO |
+- V1前后端源码已清理，恢复基线：`30a85e1`
+- R1 SaaS控制面设计已评审通过
+- 已建立Java模块化单体和Vue租户感知前端骨架
+- OIDC、数据库模型和真实租户接口尚未实现
 
-## 端口
+## 工程目录
 
-| 服务 | 端口 |
-|------|------|
-| 后端 | 8080 |
-| admin-web | 5173 |
-| Postgres | 5432 |
-| Redis | 6379 |
-| MinIO API / Console | 9000 / 9001 |
+| 路径 | 用途 |
+|---|---|
+| `cj-platform-server/` | Java 21、Spring Boot 3.5模块化单体 |
+| `cj-platform-web/` | Vue 3、TypeScript、Vite、pnpm工作区 |
+| `.cursor/skills/chuanjie-platform/` | 已评审架构、阶段设计与进度门禁 |
+| `docs/plans/` | 可执行实施计划 |
+| `docs/rebuild/` | V1清理、恢复和迁移记录 |
+| `docker-compose.yml` | PostgreSQL、Valkey、SeaweedFS本地环境 |
 
-Postgres：`cj` / `cj_local`，库名 `cj_platform`  
-MinIO：`cjminio` / `cjminio_local`
+## 技术基线
 
-## 本地启动
+| 层 | 选型 |
+|---|---|
+| 后端 | Java 21、Spring Boot 3.5.12、Maven |
+| 前端 | Vue 3、TypeScript 5、Vite 7、pnpm 10 |
+| 数据 | PostgreSQL 16 |
+| 缓存 | Valkey 9 |
+| 文件 | SeaweedFS 4.46（S3兼容接口） |
+| 身份 | 标准OIDC，默认Casdoor |
 
-```bash
-# A. 无 Docker：直接用默认 nodocker（内存 H2）
+## 本地验证
+
+```powershell
+# 后端：需要JAVA_HOME指向JDK 21或更高版本，编译目标固定为Java 21。
 cd cj-platform-server
-# 需 JDK 17+；本机示例：JAVA_HOME=D:\jdk17
-mvn -DskipTests package
-java -jar cj-server/target/cj-server-0.1.0-SNAPSHOT.jar
-# IDE 运行 main 即可，默认 profile=nodocker
-
-# B. 有 Docker Desktop：先起中间件，再切 local
-docker compose up -d
-java -jar cj-server/target/cj-server-0.1.0-SNAPSHOT.jar --spring.profiles.active=local
+.\mvnw.cmd test
 
 # 前端
-cd ../cj-platform-web
-pnpm install
-pnpm dev:admin
-# 浏览器打开 http://localhost:5173 → 登录页
-# 默认账号 admin / Admin@123
-# 前端默认经 Vite 代理访问 8080
+cd ..\cj-platform-web
+pnpm install --frozen-lockfile
+pnpm test
+pnpm typecheck
+pnpm build:admin
+
+# 本地基础设施
+cd ..
+docker compose config
+docker compose up -d
 ```
 
-验证：
+也可以在项目根目录运行 `powershell -ExecutionPolicy Bypass -File .\scripts\verify.ps1`，一次完成后端测试、前端测试、类型检查、构建和可用时的Compose校验。本机无需全局安装Maven；Wrapper首次运行会下载固定的Maven 3.9.11。
 
-- http://localhost:8080/actuator/health
-- http://localhost:8080/admin-api/v1/system/ping
-- `POST /admin-api/v1/auth/login`（账号密码）
-- admin-web 登录后进工作台，可退出
-- **接口文档（Swagger UI）：** http://localhost:8080/swagger-ui.html  
-  OpenAPI JSON：http://localhost:8080/v3/api-docs  
-  用法：先调「登录」拿 `accessToken` → 右上角 Authorize → 填入 token → 调需鉴权接口
+当前设备尚未安装Docker CLI，因此这里只完成了Compose YAML静态结构检查，容器运行验收待Docker可用后执行。
 
-**说明：**
+## 本地端口
 
-- 报 `Connection to localhost:5432 refused` = 后端用了 `local` 且 Postgres 未启动 → 改用默认 `nodocker`，或先 `docker compose up -d`
-- 前端直连 8080 失败 / CORS：确认 `VITE_API_BASE_URL` 为空，走代理；并确认后端已在 8080 启动
-- Casdoor SSO：仅 skill 文档预留，S1 不部署
-- 生产环境可通过 `springdoc.api-docs.enabled=false` / `springdoc.swagger-ui.enabled=false` 关闭文档入口
+| 服务 | 端口 |
+|---|---:|
+| 后端 | 8080 |
+| 管理端 | 5173 |
+| PostgreSQL | 5432 |
+| Valkey | 6379 |
+| SeaweedFS S3 | 8333 |
+| SeaweedFS Filer | 8888 |
+| SeaweedFS Master | 9333 |
+
+## 开发门禁
+
+开发前先阅读：
+
+- `.cursor/skills/chuanjie-platform/architecture-v2-saas.md`
+- `.cursor/skills/chuanjie-platform/v2-rebuild.md`
+- `.cursor/skills/chuanjie-platform/r1-saas-control-plane.md`
+- `.cursor/skills/chuanjie-platform/progress.md`
+
+任何新功能必须先写清范围、数据模型、接口、状态机和验收标准，经评审后才能编码。

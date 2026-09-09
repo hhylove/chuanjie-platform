@@ -1,0 +1,5 @@
+packages:
+  # 四个用户端均放在apps下；R1先落地管理端。
+  - "apps/*"
+  # 只有跨应用复用的能力才能进入packages。
+  - "packages/*"
