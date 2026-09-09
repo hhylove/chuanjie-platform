@@ -1,0 +1,14 @@
+{
+  "name": "cj-platform-web",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "dev:admin": "pnpm --filter @cj/admin-web dev",
+    "build:admin": "pnpm --filter @cj/admin-web build"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+**/node_modules/
+target/
+**/target/
+dist/
+**/dist/
+.pnpm-store/
+
+# Env / local secrets
+.env
+.env.*
+**/application-local-secret.yml
+*.local.override.yml
+
+# IDE
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Word locks
+~$*
+
+# Generators
+_gen_*.js
+_extract*
+_arch*
+_update*
+_create*
+_patch*
+_verify*
+_progress*

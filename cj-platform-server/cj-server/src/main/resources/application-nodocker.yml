@@ -1,0 +1,26 @@
+# nodocker：无 Docker 时的本地探活配置
+# 用途：IDE/命令行快速启动，验证 health/ping；不替代正式 local 联调
+# 差异：H2 内存库 + 关闭 Redis 自动配置（避免 6379 连不上导致启动失败）
+spring:
+  datasource:
+    # 内存 H2，兼容 PostgreSQL 模式；进程退出数据清空
+    url: jdbc:h2:mem:cj_platform;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DATABASE_TO_LOWER=TRUE
+    username: sa
+    # H2 默认空密码
+    password:
+    driver-class-name: org.h2.Driver
+  data:
+    redis:
+      # 仍写出主机端口便于对照；本 profile 下 Redis 自动配置已排除，不会真连
+      host: localhost
+      port: 6379
+  autoconfigure:
+    exclude:
+      # 无 Redis 容器时排除自动配置，防止启动失败
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+  flyway:
+    # 对 H2 同样跑迁移，验证脚本可执行
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true

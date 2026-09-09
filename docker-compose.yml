@@ -1,0 +1,62 @@
+# 创界 S0 本地中间件：Postgres（业务库）+ Redis（缓存）+ MinIO（对象存储）
+# 启动：docker compose up -d
+# 后端联调 profile：local（见 application-local.yml）
+
+services:
+  postgres:
+    # 业务主库；与 application-local.yml 数据源一致
+    image: postgres:16-alpine
+    container_name: cj-postgres
+    environment:
+      # 初始库名
+      POSTGRES_DB: cj_platform
+      # 应用连接用户
+      POSTGRES_USER: cj
+      # 仅本地开发密码，禁止用于生产
+      POSTGRES_PASSWORD: cj_local
+    ports:
+      # 宿主机 5432 -> 容器 5432
+      - "5432:5432"
+    volumes:
+      # 数据持久化卷，避免容器删除丢库
+      - cj_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      # compose 依赖探测：库可接受连接
+      test: ["CMD-SHELL", "pg_isready -U cj -d cj_platform"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    # 缓存/分布式锁等；S0 配置预留
+    image: redis:7-alpine
+    container_name: cj-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  minio:
+    # 对象存储（附件/导出等）；S0 仅起服务，业务接入后续阶段
+    image: minio/minio:latest
+    container_name: cj-minio
+    # API 9000，控制台 9001
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: cjminio
+      # 仅本地开发口令
+      MINIO_ROOT_PASSWORD: cjminio_local
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - cj_minio_data:/data
+
+volumes:
+  # 具名卷：Postgres 数据
+  cj_pg_data:
+  # 具名卷：MinIO 对象数据
+  cj_minio_data:

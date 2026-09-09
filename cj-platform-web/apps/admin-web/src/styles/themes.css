@@ -1,0 +1,223 @@
+/**
+ * PC 端五套主题：挂在 html[data-theme]
+ * id：enterprise | glass | daylight | night | warm
+ * 偏好由 useTheme 写入 localStorage（cj.admin.theme）
+ */
+
+:root,
+html[data-theme='daylight'] {
+  color-scheme: light;
+  --cj-ink: #152033;
+  --cj-ink-soft: #2a3a52;
+  --cj-mist: #f0f4fa;
+  --cj-paper: #f7f9fc;
+  --cj-accent: #2563eb;
+  --cj-accent-hover: #1d4ed8;
+  --cj-line: rgba(21, 32, 51, 0.1);
+  --cj-ok: #059669;
+  --cj-surface: #ffffff;
+  --cj-surface-solid: #ffffff;
+  --cj-text-muted: rgba(21, 32, 51, 0.52);
+  --cj-bar-bg: rgba(247, 249, 252, 0.92);
+  --cj-nav-bg: #ffffff;
+  --cj-nav-item: rgba(21, 32, 51, 0.7);
+  --cj-nav-active-bg: #2563eb;
+  --cj-nav-active-fg: #ffffff;
+  --cj-login-page-bg: #1e3a5f;
+  --cj-login-fg: #f0f4fa;
+  --cj-login-muted: rgba(240, 244, 250, 0.75);
+  --cj-login-panel-bg: #ffffff;
+  --cj-blob-a: rgba(37, 99, 235, 0.4);
+  --cj-blob-b: rgba(14, 165, 233, 0.35);
+  --cj-shell-glow-a: rgba(37, 99, 235, 0.08);
+  --cj-shell-glow-b: rgba(14, 165, 233, 0.07);
+  --cj-glass-blur: 8px;
+  --cj-font-display: 'Manrope', 'Noto Sans SC', sans-serif;
+  --cj-font-body: 'Manrope', 'Noto Sans SC', sans-serif;
+  --cj-radius: 10px;
+  --cj-shadow: 0 12px 32px rgba(21, 32, 51, 0.1);
+  --el-color-primary: #2563eb;
+  --cj-header-bg: linear-gradient(90deg, #1f4f8a 0%, #3d6fb5 55%, #5b7fd1 100%);
+  --cj-aside-bg: #f5f7fb;
+  --cj-tabs-bg: #eef2f8;
+}
+
+html[data-theme='enterprise'] {
+  color-scheme: light;
+  --cj-ink: #0c2428;
+  --cj-ink-soft: #1a3d42;
+  --cj-mist: #e8f1f0;
+  --cj-paper: #f2f6f5;
+  --cj-accent: #1a6b72;
+  --cj-accent-hover: #14555b;
+  --cj-line: rgba(15, 42, 46, 0.11);
+  --cj-ok: #2f6f5e;
+  --cj-surface: rgba(255, 255, 255, 0.92);
+  --cj-surface-solid: #ffffff;
+  --cj-text-muted: rgba(15, 42, 46, 0.55);
+  --cj-bar-bg: rgba(242, 246, 245, 0.92);
+  --cj-nav-bg: rgba(255, 255, 255, 0.8);
+  --cj-nav-item: rgba(15, 42, 46, 0.72);
+  --cj-nav-active-bg: #0c2428;
+  --cj-nav-active-fg: #ffffff;
+  --cj-login-page-bg: #0a1f23;
+  --cj-login-fg: #eef6f5;
+  --cj-login-muted: rgba(238, 246, 245, 0.7);
+  --cj-login-panel-bg: rgba(255, 255, 255, 0.96);
+  --cj-blob-a: rgba(26, 107, 114, 0.5);
+  --cj-blob-b: rgba(196, 92, 38, 0.28);
+  --cj-shell-glow-a: rgba(26, 107, 114, 0.1);
+  --cj-shell-glow-b: rgba(196, 92, 38, 0.06);
+  --cj-glass-blur: 12px;
+  --cj-font-display: 'Fraunces', 'Noto Serif SC', serif;
+  --cj-font-body: 'Manrope', 'Noto Sans SC', sans-serif;
+  --cj-radius: 12px;
+  --cj-shadow: 0 18px 48px rgba(10, 31, 35, 0.22);
+  --el-color-primary: #1a6b72;
+  --cj-header-bg: linear-gradient(92deg, #0c2428 0%, #1a6b72 48%, #2a8a7a 100%);
+  --cj-aside-bg: #f0f5f4;
+  --cj-tabs-bg: #e4eeec;
+}
+
+html[data-theme='glass'] {
+  color-scheme: dark;
+  --cj-ink: #e8f0ff;
+  --cj-ink-soft: #b8c7e6;
+  --cj-mist: #dce6ff;
+  --cj-paper: #0b1220;
+  --cj-accent: #5b9dff;
+  --cj-accent-hover: #7ab0ff;
+  --cj-line: rgba(180, 210, 255, 0.18);
+  --cj-ok: #3ecf8e;
+  --cj-surface: rgba(18, 28, 48, 0.55);
+  --cj-surface-solid: rgba(16, 24, 42, 0.92);
+  --cj-text-muted: rgba(220, 230, 255, 0.58);
+  --cj-bar-bg: rgba(12, 18, 34, 0.55);
+  --cj-nav-bg: rgba(16, 26, 46, 0.45);
+  --cj-nav-item: rgba(220, 230, 255, 0.78);
+  --cj-nav-active-bg: rgba(91, 157, 255, 0.28);
+  --cj-nav-active-fg: #ffffff;
+  --cj-login-page-bg: #070d18;
+  --cj-login-fg: #e8f0ff;
+  --cj-login-muted: rgba(220, 230, 255, 0.7);
+  --cj-login-panel-bg: rgba(18, 28, 48, 0.55);
+  --cj-blob-a: rgba(91, 157, 255, 0.4);
+  --cj-blob-b: rgba(120, 80, 255, 0.28);
+  --cj-shell-glow-a: rgba(91, 157, 255, 0.16);
+  --cj-shell-glow-b: rgba(80, 200, 255, 0.1);
+  --cj-glass-blur: 18px;
+  --cj-font-display: 'Manrope', 'Noto Sans SC', sans-serif;
+  --cj-font-body: 'Manrope', 'Noto Sans SC', sans-serif;
+  --cj-radius: 16px;
+  --cj-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+  --el-color-primary: #5b9dff;
+  --cj-header-bg: linear-gradient(90deg, #0b1528 0%, #152844 55%, #1a3560 100%);
+  --cj-aside-bg: #101826;
+  --cj-tabs-bg: #0d1524;
+}
+
+html[data-theme='night'] {
+  color-scheme: dark;
+  --cj-ink: #e6eaf0;
+  --cj-ink-soft: #aeb6c4;
+  --cj-mist: #c8d0dc;
+  --cj-paper: #12151c;
+  --cj-accent: #7dd3c0;
+  --cj-accent-hover: #9ee0d1;
+  --cj-line: rgba(230, 234, 240, 0.12);
+  --cj-ok: #6bcf9b;
+  --cj-surface: #1a1f2a;
+  --cj-surface-solid: #1a1f2a;
+  --cj-text-muted: rgba(230, 234, 240, 0.5);
+  --cj-bar-bg: rgba(18, 21, 28, 0.92);
+  --cj-nav-bg: #1a1f2a;
+  --cj-nav-item: rgba(230, 234, 240, 0.72);
+  --cj-nav-active-bg: #2a3344;
+  --cj-nav-active-fg: #7dd3c0;
+  --cj-login-page-bg: #0c0e13;
+  --cj-login-fg: #e6eaf0;
+  --cj-login-muted: rgba(200, 208, 220, 0.7);
+  --cj-login-panel-bg: #1a1f2a;
+  --cj-blob-a: rgba(125, 211, 192, 0.22);
+  --cj-blob-b: rgba(100, 140, 200, 0.18);
+  --cj-shell-glow-a: rgba(125, 211, 192, 0.06);
+  --cj-shell-glow-b: rgba(100, 140, 200, 0.05);
+  --cj-glass-blur: 6px;
+  --cj-font-display: 'Fraunces', 'Noto Serif SC', serif;
+  --cj-font-body: 'Manrope', 'Noto Sans SC', sans-serif;
+  --cj-radius: 12px;
+  --cj-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  --el-color-primary: #7dd3c0;
+  --cj-header-bg: linear-gradient(90deg, #10141c 0%, #1a2230 60%, #243044 100%);
+  --cj-aside-bg: #161b24;
+  --cj-tabs-bg: #12171f;
+}
+
+html[data-theme='warm'] {
+  color-scheme: light;
+  --cj-ink: #2a2118;
+  --cj-ink-soft: #4a3a2c;
+  --cj-mist: #f6efe6;
+  --cj-paper: #f3ebe1;
+  --cj-accent: #c45c26;
+  --cj-accent-hover: #a84a1c;
+  --cj-line: rgba(42, 33, 24, 0.12);
+  --cj-ok: #3d7a5a;
+  --cj-surface: rgba(255, 252, 247, 0.92);
+  --cj-surface-solid: #fffaf4;
+  --cj-text-muted: rgba(42, 33, 24, 0.55);
+  --cj-bar-bg: rgba(243, 235, 225, 0.9);
+  --cj-nav-bg: rgba(255, 250, 244, 0.85);
+  --cj-nav-item: rgba(42, 33, 24, 0.72);
+  --cj-nav-active-bg: #2a2118;
+  --cj-nav-active-fg: #fffaf4;
+  --cj-login-page-bg: #2a2118;
+  --cj-login-fg: #f6efe6;
+  --cj-login-muted: rgba(246, 239, 230, 0.72);
+  --cj-login-panel-bg: rgba(255, 250, 244, 0.96);
+  --cj-blob-a: rgba(196, 92, 38, 0.5);
+  --cj-blob-b: rgba(61, 122, 90, 0.35);
+  --cj-shell-glow-a: rgba(196, 92, 38, 0.1);
+  --cj-shell-glow-b: rgba(61, 122, 90, 0.08);
+  --cj-glass-blur: 10px;
+  --cj-font-display: 'Fraunces', 'Noto Serif SC', serif;
+  --cj-font-body: 'Manrope', 'Noto Sans SC', sans-serif;
+  --cj-radius: 14px;
+  --cj-shadow: 0 18px 50px rgba(42, 33, 24, 0.16);
+  --el-color-primary: #c45c26;
+  --cj-header-bg: linear-gradient(90deg, #3a2a1c 0%, #5a3d28 55%, #7a4e2e 100%);
+  --cj-aside-bg: #f6f0e8;
+  --cj-tabs-bg: #efe6da;
+}
+
+/* Element Plus：跟随主题表面色，避免深色主题下表格仍白底刺眼 */
+html[data-theme='glass'],
+html[data-theme='night'] {
+  --el-bg-color: var(--cj-surface-solid);
+  --el-bg-color-page: var(--cj-paper);
+  --el-bg-color-overlay: var(--cj-surface-solid);
+  --el-text-color-primary: var(--cj-ink);
+  --el-text-color-regular: var(--cj-ink-soft);
+  --el-text-color-secondary: var(--cj-text-muted);
+  --el-text-color-placeholder: var(--cj-text-muted);
+  --el-border-color: color-mix(in srgb, var(--cj-ink) 18%, transparent);
+  --el-border-color-light: color-mix(in srgb, var(--cj-ink) 12%, transparent);
+  --el-border-color-lighter: color-mix(in srgb, var(--cj-ink) 8%, transparent);
+  --el-fill-color-blank: var(--cj-surface-solid);
+  --el-fill-color-light: color-mix(in srgb, var(--cj-ink) 6%, transparent);
+  --el-mask-color: rgba(0, 0, 0, 0.55);
+}
+
+/* 弱透明偏好：减弱毛玻璃，避免远程桌面/弱机卡顿 */
+@media (prefers-reduced-transparency: reduce) {
+  html[data-theme='glass'],
+  html[data-theme='enterprise'],
+  html[data-theme='daylight'],
+  html[data-theme='night'],
+  html[data-theme='warm'] {
+    --cj-glass-blur: 0px;
+    --cj-bar-bg: var(--cj-surface-solid);
+    --cj-nav-bg: var(--cj-surface-solid);
+    --cj-login-panel-bg: var(--cj-surface-solid);
+  }
+}

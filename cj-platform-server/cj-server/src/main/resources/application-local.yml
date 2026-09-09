@@ -1,0 +1,22 @@
+# local：本机 Docker Compose 联调（Postgres + Redis）
+# 使用前：根目录执行 docker compose up -d
+# 启动：--spring.profiles.active=local
+spring:
+  datasource:
+    # 业务库 JDBC；库名/账号与 docker-compose 中 postgres 服务一致
+    url: jdbc:postgresql://localhost:5432/cj_platform
+    username: cj
+    password: cj_local
+    driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      # 缓存/会话等（S0 已接入配置，业务使用从 S1 起）
+      host: localhost
+      port: 6379
+  flyway:
+    # 启动时执行 db/migration 下版本脚本
+    enabled: true
+    # 迁移脚本 classpath 位置
+    locations: classpath:db/migration
+    # 非空库首次接入时建立 baseline，避免历史库无法 migrate
+    baseline-on-migrate: true
