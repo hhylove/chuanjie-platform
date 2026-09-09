@@ -1,3 +1,0 @@
-# entrepreneur-web
-
-S0 占位。完整应用在后续阶段建设。
